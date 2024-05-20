@@ -1,5 +1,7 @@
 module github.com/khulnasoft-lab/utern
 
+go 1.19
+
 require (
 	github.com/aws/aws-sdk-go v1.44.88
 	github.com/briandowns/spinner v1.7.0
@@ -60,7 +62,3 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-go 1.21
-
-toolchain go1.22.2
