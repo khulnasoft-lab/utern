@@ -22,14 +22,19 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
         check-latest: false
-    - name: lint
+    - name: Set up Go modules
+      run: echo "export GO111MODULE=on" >> $GITHUB_ENV
+    - name: Install dependencies
       run: |
-        GO111MODULE=off GOBIN=$(pwd)/bin go get golang.org/x/lint/golint
-        bin/golint -set_exit_status ./...
-      if: "matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'"
+        go get \
+          golang.org/x/lint/golint \
+          github.com/Songmu/godzil/cmd/godzil \
+          github.com/Songmu/gocredits/cmd/gocredits
     - name: Print Go version
       run: go version
     - name: Build
       run: go build -v ./...
     - name: Run tests
       run: go test -v ./...
+    - name: Run linter
+      run: golangci-lint run
