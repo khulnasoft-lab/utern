@@ -1,0 +1,63 @@
+release:
+  github:
+    owner: khulnasoft-lab
+    name: utern
+  name_template: '{{.Tag}}'
+brews:
+  - name: utern
+    tap:
+      owner: khulnasoft-lab
+      name: homebrew-utern
+      token: "{{ .Env.GITHUB_TOKEN }}"
+    commit_author:
+      name: goreleaserbot
+      email: goreleaser@carlosbecker.com
+    description: "Multi group and stream log tailing for AWS CloudWatch Logs"
+    homepage: "https://github.com/khulnasoft-lab/utern"
+    install: |
+      bin.install Dir['utern']
+    test: |
+      system "#{bin}/utern"
+builds:
+- goos:
+  - linux
+  - darwin
+  - windows
+  goarch:
+  - amd64
+  - "386"
+  - arm
+  - arm64
+  goarm:
+  - 7
+  main: .
+  ldflags:
+  - -s -w
+  - "-X main.version={{.Version}}"
+  - "-X main.commit={{.Commit}}"
+archives:
+  - format: zip
+    name_template: '{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    files:
+    - LICENSE*
+    - README*
+    - CHANGELOG*
+    - CREDITS
+nfpms:
+  - file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    replacements:
+      amd64: 64-bit
+      386: 32-bit
+      arm: ARM
+      arm64: ARM64
+      darwin: macOS
+      linux: Tux
+    vendor: khulnasoft-lab
+    homepage: https://github.com/khulnasoft-lab/utern
+    maintainer: KhulnaSoft Lab <info@khulnasoft.com>
+    license: MIT
+    formats:
+    - deb
+    - rpm
+checksum:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_checksums.txt'
