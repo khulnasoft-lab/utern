@@ -22,8 +22,11 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
         check-latest: false
-    - name: Install golangci-lint
-      run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+    - name: lint
+      run: |
+        GO111MODULE=off GOBIN=$(pwd)/bin go get golang.org/x/lint/golint
+        bin/golint -set_exit_status ./...
+      if: "matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'"
     - name: Print Go version
       run: go version
     - name: Build
