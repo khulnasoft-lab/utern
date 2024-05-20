@@ -26,10 +26,15 @@ jobs:
       run: echo "export GO111MODULE=on" >> $GITHUB_ENV
     - name: Install dependencies
       run: |
-        go get \
-          golang.org/x/lint/golint \
-          github.com/Songmu/godzil/cmd/godzil \
-          github.com/Songmu/gocredits/cmd/gocredits
+        go get golang.org/x/lint/golint
+        go get github.com/Songmu/godzil/cmd/godzil
+        go get github.com/Songmu/gocredits/cmd/gocredits
+    - name: Check for required files
+      run: |
+        if [ ! -f "path/to/your/testdata/assets/basic" ]; then
+          echo "Required files are missing."
+          exit 1
+        fi
     - name: Print Go version
       run: go version
     - name: Build
